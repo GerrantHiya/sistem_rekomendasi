@@ -1,15 +1,15 @@
 @extends('layouts.app')
 
 @section('title', 'Beranda')
-@section('description', 'TokoGH - Temukan produk premium berkualitas tinggi dengan rekomendasi cerdas berbasis TF-IDF')
+@section('description', 'Fit & Go - Temukan perlengkapan olahraga dan gaya hidup aktif dengan rekomendasi AI cerdas')
 
 @section('content')
 <!-- Hero Section -->
 <section class="hero">
     <div class="container">
         <div class="hero-content fade-in">
-            <h1>Temukan Produk Impianmu</h1>
-            <p>Belanja cerdas dengan sistem rekomendasi TF-IDF. Kami membantu menemukan produk yang paling sesuai dengan preferensi Anda.</p>
+            <h1>Start Your Fitness Journey</h1>
+            <p>Temukan perlengkapan olahraga terbaik dengan sistem rekomendasi AI. Kami membantu menemukan produk yang sempurna untuk gaya hidup aktif Anda.</p>
             <div style="display: flex; gap: 1rem; justify-content: center;">
                 <a href="{{ route('products.index') }}" class="btn btn-primary btn-lg">
                     <i class="fas fa-shopping-bag"></i> Mulai Belanja
@@ -130,7 +130,7 @@
                     <p class="section-subtitle" style="margin-bottom: 0; margin-top: 0.25rem;">Berdasarkan riwayat belanja Anda</p>
                 </div>
                 <span class="tfidf-badge">
-                    <i class="fas fa-brain"></i> Powered by TF-IDF
+                    <i class="fas fa-brain"></i> Powered by Hybrid AI
                 </span>
             </div>
             
@@ -209,7 +209,7 @@
                 <div style="font-size: 3rem; margin-bottom: 1rem;">
                     <i class="fas fa-brain"></i>
                 </div>
-                <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem;">Rekomendasi TF-IDF</h3>
+                <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem;">Smart AI Recommendation</h3>
                 <p style="color: var(--gray-light);">Sistem cerdas untuk menemukan produk yang tepat</p>
             </div>
             <div class="fade-in">

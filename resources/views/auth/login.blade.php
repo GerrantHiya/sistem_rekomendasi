@@ -10,10 +10,10 @@
                 <div class="card-body" style="padding: 2.5rem;">
                     <div style="text-align: center; margin-bottom: 2rem;">
                         <div style="font-size: 3rem; margin-bottom: 1rem; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-                            <i class="fas fa-gem"></i>
+                            <i class="fas fa-dumbbell"></i>
                         </div>
                         <h1 style="font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem;">Selamat Datang</h1>
-                        <p style="color: var(--gray);">Masuk ke akun TokoGH Anda</p>
+                        <p style="color: var(--gray);">Masuk ke akun Fit & Go Anda</p>
                     </div>
 
                     <form action="{{ route('login.submit') }}" method="POST">

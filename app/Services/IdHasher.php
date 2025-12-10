@@ -4,7 +4,7 @@ namespace App\Services;
 
 class IdHasher
 {
-    private static $salt = 'TokoGH2024!';
+    private static $salt = 'FitAndGo2024!';
     
     /**
      * Encode an ID to a hash string

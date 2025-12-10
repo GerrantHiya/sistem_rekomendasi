@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login - TokoGH</title>
+    <title>Admin Login - Fit & Go</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -82,8 +82,8 @@
 <body>
     <div class="login-card">
         <div class="logo">
-            <i class="fas fa-gem"></i>
-            <h1>TokoGH Admin</h1>
+            <i class="fas fa-dumbbell"></i>
+            <h1>Fit & Go Admin</h1>
             <p>Masuk ke panel administrator</p>
         </div>
 
@@ -98,7 +98,7 @@
             @csrf
             <div class="form-group">
                 <label class="form-label">Email</label>
-                <input type="email" name="email" class="form-control" placeholder="admin@tokogh.com" value="{{ old('email') }}" required>
+                <input type="email" name="email" class="form-control" placeholder="admin@fitandgo.com" value="{{ old('email') }}" required>
             </div>
             <div class="form-group">
                 <label class="form-label">Password</label>

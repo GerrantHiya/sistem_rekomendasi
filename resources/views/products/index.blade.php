@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Semua Produk')
-@section('description', 'Jelajahi koleksi lengkap produk premium di TokoGH')
+@section('description', 'Jelajahi koleksi lengkap perlengkapan olahraga di Fit & Go')
 
 @section('content')
 <section class="section">

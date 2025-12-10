@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'TokoGH') - Premium E-Commerce</title>
-    <meta name="description" content="@yield('description', 'TokoGH - Temukan produk premium berkualitas tinggi dengan harga terbaik')">
+    <title>@yield('title', 'Fit & Go') - Your Fitness & Lifestyle Store</title>
+    <meta name="description" content="@yield('description', 'Fit & Go - Temukan perlengkapan olahraga dan gaya hidup aktif berkualitas tinggi')">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -946,8 +946,8 @@
     <nav class="navbar">
         <div class="navbar-container">
             <a href="{{ route('home') }}" class="logo">
-                <i class="fas fa-gem"></i>
-                TokoGH
+                <i class="fas fa-dumbbell"></i>
+                Fit & Go
             </a>
 
             <ul class="nav-links">
@@ -1032,10 +1032,10 @@
             <div class="footer-grid">
                 <div>
                     <div class="footer-brand">
-                        <i class="fas fa-gem"></i> TokoGH
+                        <i class="fas fa-dumbbell"></i> Fit & Go
                     </div>
                     <p class="footer-description">
-                        Temukan produk premium berkualitas tinggi dengan harga terbaik. Belanja nyaman dan aman hanya di TokoGH.
+                        Perlengkapan olahraga dan gaya hidup aktif berkualitas tinggi. Belanja nyaman dan aman hanya di Fit & Go.
                     </p>
                     <div class="social-links" style="margin-top: 1.5rem;">
                         <a href="#"><i class="fab fa-facebook-f"></i></a>
@@ -1071,7 +1071,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; {{ date('Y') }} TokoGH. All rights reserved. Powered by TF-IDF Recommendation System.</p>
+                <p>&copy; {{ date('Y') }} Fit & Go. All rights reserved. Powered by Hybrid AI Recommendation System.</p>
             </div>
         </div>
     </footer>

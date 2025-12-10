@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Admin') - TokoGH Admin</title>
+    <title>@yield('title', 'Admin') - Fit & Go Admin</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -313,8 +313,8 @@
         <aside class="sidebar">
             <div class="sidebar-header">
                 <a href="{{ route('admin.dashboard') }}" class="sidebar-logo">
-                    <i class="fas fa-gem"></i>
-                    TokoGH Admin
+                    <i class="fas fa-dumbbell"></i>
+                    Fit & Go Admin
                 </a>
             </div>
             <nav class="sidebar-nav">

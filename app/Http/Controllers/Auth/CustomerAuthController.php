@@ -66,7 +66,7 @@ class CustomerAuthController extends Controller
         Auth::guard('customer')->login($customer);
 
         return redirect()->route('home')
-            ->with('success', 'Registration successful! Welcome to TokoGH.');
+            ->with('success', 'Registration successful! Welcome to Fit & Go.');
     }
 
     public function logout()
