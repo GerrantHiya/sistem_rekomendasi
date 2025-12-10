@@ -6,21 +6,21 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Brand;
 use App\Models\Gender;
-use App\Services\TfIdfService;
+use App\Services\HybridRecommendationService;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    protected TfIdfService $tfIdfService;
+    protected HybridRecommendationService $recommendationService;
 
-    public function __construct(TfIdfService $tfIdfService)
+    public function __construct(HybridRecommendationService $recommendationService)
     {
-        $this->tfIdfService = $tfIdfService;
+        $this->recommendationService = $recommendationService;
     }
 
     public function index(Request $request)
     {
-        $query = Product::with(['brand', 'category', 'subcategory', 'gender', 'variants.images']);
+        $query = Product::with(['brand', 'category', 'subcategory', 'gender', 'variants.images', 'reviews']);
 
         // Filter by category
         if ($request->has('category') && $request->category) {
@@ -50,6 +50,17 @@ class ProductController extends Controller
             });
         }
 
+        // Filter by minimum rating
+        if ($request->has('min_rating') && $request->min_rating) {
+            $query->whereHas('reviews', function($q) use ($request) {
+                $q->where('is_approved', true);
+            }, '>=', 1)
+            ->withAvg(['reviews' => function($q) {
+                $q->where('is_approved', true);
+            }], 'rating')
+            ->having('reviews_avg_rating', '>=', $request->min_rating);
+        }
+
         // Sorting
         $sort = $request->get('sort', 'newest');
         switch ($sort) {
@@ -64,6 +75,18 @@ class ProductController extends Controller
                 break;
             case 'name_desc':
                 $query->orderBy('Name', 'desc');
+                break;
+            case 'rating':
+                $query->withAvg(['reviews' => function($q) {
+                    $q->where('is_approved', true);
+                }], 'rating')
+                ->orderByDesc('reviews_avg_rating');
+                break;
+            case 'popular':
+                $query->withCount(['variants as total_orders' => function($q) {
+                    $q->join('order_items', 'product_variants.ID_Variants', '=', 'order_items.ID_Variant');
+                }])
+                ->orderByDesc('total_orders');
                 break;
             default:
                 $query->orderBy('ID_Products', 'desc');
@@ -85,20 +108,30 @@ class ProductController extends Controller
             'category', 
             'subcategory', 
             'gender', 
-            'variants.images'
+            'variants.images',
+            'approvedReviews.customer'
         ])->findOrFail($id);
 
-        // Get similar products using TF-IDF
-        $similarProducts = $this->tfIdfService->getSimilarProducts($product, 4);
+        // Get similar products using Hybrid algorithm (TF-IDF + Rating + Popularity)
+        $similarProducts = $this->recommendationService->getSimilarProducts($product, 4);
 
-        return view('products.show', compact('product', 'similarProducts'));
+        // Get personalized recommendations if user is logged in
+        $personalizedRecommendations = collect();
+        if (auth()->guard('customer')->check()) {
+            $personalizedRecommendations = $this->recommendationService->getPersonalizedRecommendations(
+                auth()->guard('customer')->id(),
+                4
+            );
+        }
+
+        return view('products.show', compact('product', 'similarProducts', 'personalizedRecommendations'));
     }
 
     public function byCategory($id)
     {
         $category = Category::findOrFail($id);
         
-        $products = Product::with(['brand', 'category', 'variants.images'])
+        $products = Product::with(['brand', 'category', 'variants.images', 'reviews'])
             ->where('ID_Categories', $id)
             ->paginate(12);
 
@@ -113,7 +146,7 @@ class ProductController extends Controller
     {
         $brand = Brand::findOrFail($id);
         
-        $products = Product::with(['brand', 'category', 'variants.images'])
+        $products = Product::with(['brand', 'category', 'variants.images', 'reviews'])
             ->where('ID_Brand', $id)
             ->paginate(12);
 
