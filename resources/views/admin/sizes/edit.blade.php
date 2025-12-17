@@ -1,0 +1,82 @@
+@extends('admin.layouts.app')
+
+@section('title', 'Edit Size')
+
+@section('content')
+<div class="card">
+    <div class="card-header">
+        <span>Edit Size: {{ $size->name }}</span>
+        <a href="{{ route('admin.sizes.index') }}" class="btn btn-outline btn-sm">
+            <i class="fas fa-arrow-left"></i> Kembali
+        </a>
+    </div>
+    <div class="card-body">
+        <form action="{{ route('admin.sizes.update', $size->ID_Size) }}" method="POST">
+            @csrf
+            @method('PUT')
+            
+            <div class="form-group">
+                <label for="name">Nama Size <span style="color: var(--danger);">*</span></label>
+                <input type="text" id="name" name="name" class="form-control" 
+                       value="{{ old('name', $size->name) }}" placeholder="contoh: S, M, L, XL" required>
+                @error('name')
+                    <span style="color: var(--danger); font-size: 0.85rem;">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                <div class="form-group">
+                    <label for="chest">Chest / Lingkar Dada (cm)</label>
+                    <input type="number" id="chest" name="chest" class="form-control" 
+                           value="{{ old('chest', $size->chest) }}" step="0.1" min="0" max="200">
+                    @error('chest')
+                        <span style="color: var(--danger); font-size: 0.85rem;">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <label for="body_length">Body Length / Panjang (cm)</label>
+                    <input type="number" id="body_length" name="body_length" class="form-control" 
+                           value="{{ old('body_length', $size->body_length) }}" step="0.1" min="0" max="200">
+                    @error('body_length')
+                        <span style="color: var(--danger); font-size: 0.85rem;">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <label for="waist">Waist / Lingkar Pinggang (cm)</label>
+                    <input type="number" id="waist" name="waist" class="form-control" 
+                           value="{{ old('waist', $size->waist) }}" step="0.1" min="0" max="200">
+                    @error('waist')
+                        <span style="color: var(--danger); font-size: 0.85rem;">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <label for="hip">Hip / Lingkar Pinggul (cm)</label>
+                    <input type="number" id="hip" name="hip" class="form-control" 
+                           value="{{ old('hip', $size->hip) }}" step="0.1" min="0" max="200">
+                    @error('hip')
+                        <span style="color: var(--danger); font-size: 0.85rem;">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <label for="thigh">Thigh / Lingkar Paha (cm)</label>
+                    <input type="number" id="thigh" name="thigh" class="form-control" 
+                           value="{{ old('thigh', $size->thigh) }}" step="0.1" min="0" max="200">
+                    @error('thigh')
+                        <span style="color: var(--danger); font-size: 0.85rem;">{{ $message }}</span>
+                    @enderror
+                </div>
+            </div>
+
+            <div style="margin-top: 1.5rem;">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Update Size
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+@endsection

@@ -99,7 +99,14 @@
                                            style="width: 20px; height: 20px; accent-color: var(--primary);"
                                            onchange="this.closest('form').querySelectorAll('label').forEach(l => l.style.borderColor='var(--gray-lighter)'); this.closest('label').style.borderColor='var(--primary)';">
                                     <div style="flex: 1;">
-                                        <div style="font-weight: 600;">{{ $variant->color ?? 'Standard' }}</div>
+                                        <div style="font-weight: 600;">
+                                            {{ $variant->color ?? 'Standard' }}
+                                            @if($variant->size && $variant->size->name !== 'N/A')
+                                                <span style="background: var(--primary); color: white; padding: 0.15rem 0.5rem; border-radius: 0.25rem; font-size: 0.75rem; margin-left: 0.5rem;">
+                                                    Size: {{ $variant->size->name }}
+                                                </span>
+                                            @endif
+                                        </div>
                                         <div style="font-size: 0.85rem; color: var(--gray);">
                                             SKU: {{ $variant->variant_sku }} • 
                                             Stok: {{ $variant->stock_qty }}

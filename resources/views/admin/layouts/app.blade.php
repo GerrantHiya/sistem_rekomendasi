@@ -333,6 +333,9 @@
                 <a href="{{ route('admin.brands.index') }}" class="nav-link {{ request()->routeIs('admin.brands.*') ? 'active' : '' }}">
                     <i class="fas fa-tag"></i> Brand
                 </a>
+                <a href="{{ route('admin.sizes.index') }}" class="nav-link {{ request()->routeIs('admin.sizes.*') ? 'active' : '' }}">
+                    <i class="fas fa-ruler"></i> Size
+                </a>
                 
                 <div class="nav-section">Transaksi</div>
                 <a href="{{ route('admin.orders.index') }}" class="nav-link {{ request()->routeIs('admin.orders.*') ? 'active' : '' }}">

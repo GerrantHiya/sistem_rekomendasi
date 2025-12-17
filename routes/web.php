@@ -102,5 +102,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Customers
         Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
         Route::get('/customers/{id}', [CustomerController::class, 'show'])->name('customers.show');
+        
+        // Sizes
+        Route::resource('sizes', \App\Http\Controllers\Admin\SizeController::class)->except(['show', 'destroy']);
+        Route::get('/sizes/{id}/delete', [\App\Http\Controllers\Admin\SizeController::class, 'destroy'])->name('sizes.destroy');
     });
 });

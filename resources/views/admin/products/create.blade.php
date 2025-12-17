@@ -105,13 +105,24 @@
                             <input type="number" name="variants[0][stock]" class="form-control" required>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Berat (gram)</label>
-                        <input type="number" name="variants[0][weight]" class="form-control" style="max-width: 200px;">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Gambar Varian</label>
-                        <input type="file" name="variants[0][images][]" class="form-control" multiple accept="image/*">
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                        <div class="form-group">
+                            <label class="form-label">Size</label>
+                            <select name="variants[0][size_id]" class="form-control">
+                                @foreach($sizes as $size)
+                                    <option value="{{ $size->ID_Size }}">{{ $size->name }}</option>
+                                @endforeach
+                            </select>
+                            <small style="color: var(--gray);">Untuk kategori Top/Bottom</small>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Berat (gram)</label>
+                            <input type="number" name="variants[0][weight]" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Gambar Varian</label>
+                            <input type="file" name="variants[0][images][]" class="form-control" multiple accept="image/*">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -156,13 +167,23 @@ function addVariant() {
                     <input type="number" name="variants[${variantIndex}][stock]" class="form-control" required>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="form-label">Berat (gram)</label>
-                <input type="number" name="variants[${variantIndex}][weight]" class="form-control" style="max-width: 200px;">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Gambar Varian</label>
-                <input type="file" name="variants[${variantIndex}][images][]" class="form-control" multiple accept="image/*">
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                <div class="form-group">
+                    <label class="form-label">Size</label>
+                    <select name="variants[${variantIndex}][size_id]" class="form-control">
+                        @foreach($sizes as $size)
+                            <option value="{{ $size->ID_Size }}">{{ $size->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Berat (gram)</label>
+                    <input type="number" name="variants[${variantIndex}][weight]" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Gambar Varian</label>
+                    <input type="file" name="variants[${variantIndex}][images][]" class="form-control" multiple accept="image/*">
+                </div>
             </div>
         </div>
     `;

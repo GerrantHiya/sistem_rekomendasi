@@ -109,6 +109,7 @@ class ProductController extends Controller
             'subcategory', 
             'gender', 
             'variants.images',
+            'variants.size',
             'approvedReviews.customer'
         ])->findOrFail($id);
 

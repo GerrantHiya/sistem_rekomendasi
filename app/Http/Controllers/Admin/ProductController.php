@@ -36,8 +36,9 @@ class ProductController extends Controller
         $subcategories = Subcategory::all();
         $brands = Brand::all();
         $genders = Gender::all();
+        $sizes = \App\Models\Size::orderBy('ID_Size')->get();
 
-        return view('admin.products.create', compact('categories', 'subcategories', 'brands', 'genders'));
+        return view('admin.products.create', compact('categories', 'subcategories', 'brands', 'genders', 'sizes'));
     }
 
     public function store(Request $request)
@@ -77,7 +78,7 @@ class ProductController extends Controller
                 'stock_qty' => $variantData['stock'],
                 'weight_gram' => $variantData['weight'] ?? null,
                 'ID_Product' => $product->ID_Products,
-                'ID_Size' => 0
+                'ID_Size' => $variantData['size_id'] ?? 1
             ]);
 
             // Handle images
@@ -104,14 +105,15 @@ class ProductController extends Controller
         if (!$product) {
             abort(404);
         }
-        $product->load('variants.images');
+        $product->load('variants.images', 'variants.size');
         
         $categories = Category::all();
         $subcategories = Subcategory::all();
         $brands = Brand::all();
         $genders = Gender::all();
+        $sizes = \App\Models\Size::orderBy('ID_Size')->get();
 
-        return view('admin.products.edit', compact('product', 'categories', 'subcategories', 'brands', 'genders'));
+        return view('admin.products.edit', compact('product', 'categories', 'subcategories', 'brands', 'genders', 'sizes'));
     }
 
     public function update(Request $request, $hash)
