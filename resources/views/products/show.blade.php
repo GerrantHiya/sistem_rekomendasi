@@ -246,55 +246,12 @@
                     </div>
                 @endif
 
-                <!-- Review Form -->
-                @auth('customer')
-                    @php
-                        $hasReviewed = $product->reviews->where('ID_Customers', auth()->guard('customer')->id())->count() > 0;
-                    @endphp
-                    @if(!$hasReviewed)
-                    <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--light);">
-                        <h4 style="margin-bottom: 1rem;"><i class="fas fa-edit"></i> Tulis Ulasan</h4>
-                        <form action="{{ route('products.review', $product->ID_Products) }}" method="POST">
-                            @csrf
-                            <div class="form-group">
-                                <label class="form-label">Rating *</label>
-                                <div class="star-rating-input" style="font-size: 2rem; cursor: pointer;">
-                                    @for($i = 1; $i <= 5; $i++)
-                                        <i class="far fa-star" data-rating="{{ $i }}" onclick="setRating({{ $i }})" 
-                                           style="color: #f59e0b; transition: 0.2s;"></i>
-                                    @endfor
-                                </div>
-                                <input type="hidden" name="rating" id="rating-input" value="" required>
-                                @error('rating')
-                                    <span style="color: #ef4444; font-size: 0.85rem;">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Judul (Opsional)</label>
-                                <input type="text" name="title" class="form-control" placeholder="Ringkasan ulasan Anda" maxlength="255">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Ulasan *</label>
-                                <textarea name="review" class="form-control" rows="4" placeholder="Bagikan pengalaman Anda dengan produk ini..." required minlength="10" maxlength="2000"></textarea>
-                                @error('review')
-                                    <span style="color: #ef4444; font-size: 0.85rem;">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-paper-plane"></i> Kirim Ulasan
-                            </button>
-                        </form>
-                    </div>
-                    @else
-                    <div style="margin-top: 2rem; padding: 1rem; background: var(--light); border-radius: var(--radius); text-align: center;">
-                        <i class="fas fa-check-circle" style="color: #10b981;"></i> Anda sudah memberikan ulasan untuk produk ini.
-                    </div>
-                    @endif
-                @else
-                    <div style="margin-top: 2rem; padding: 1.5rem; background: var(--light); border-radius: var(--radius); text-align: center;">
-                        <a href="{{ route('login') }}" style="color: var(--primary); text-decoration: underline;">Login</a> untuk memberikan ulasan
-                    </div>
-                @endauth
+                <!-- Info about reviewing -->
+                <div style="margin-top: 2rem; padding: 1rem; background: var(--light); border-radius: var(--radius); text-align: center; color: var(--gray);">
+                    <i class="fas fa-info-circle"></i> 
+                    Untuk memberikan ulasan, silakan beli produk ini terlebih dahulu. 
+                    Anda dapat memberikan ulasan dari halaman <a href="{{ route('orders.index') }}" style="color: var(--primary);">Riwayat Pesanan</a> setelah pesanan selesai.
+                </div>
             </div>
         </div>
     </div>

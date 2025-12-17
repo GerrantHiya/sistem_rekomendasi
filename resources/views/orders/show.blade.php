@@ -56,10 +56,75 @@
                                     </h3>
                                     <p style="color: var(--gray); font-size: 0.9rem; margin-bottom: 0.5rem;">
                                         {{ $item->variant->color ?? '' }} • {{ $item->variant->variant_sku ?? '' }}
+                                        @if($item->variant && $item->variant->size && $item->variant->size->name !== 'N/A')
+                                            • Size: {{ $item->variant->size->name }}
+                                        @endif
                                     </p>
-                                    <div style="font-weight: 700; color: var(--primary);">
+                                    <div style="font-weight: 700; color: var(--primary); margin-bottom: 0.75rem;">
                                         Rp {{ number_format($item->Subtotal, 0, ',', '.') }}
                                     </div>
+                                    
+                                    {{-- Review Section for Delivered Orders --}}
+                                    @if($order->Status == \App\Models\Order::STATUS_DELIVERED && $item->variant && $item->variant->product)
+                                        @php
+                                            $productId = $item->variant->product->ID_Products;
+                                            $existingReview = \App\Models\ProductReview::where('ID_Products', $productId)
+                                                ->where('ID_Customers', auth()->guard('customer')->id())
+                                                ->first();
+                                        @endphp
+                                        
+                                        @if($existingReview)
+                                            <div style="background: #f0fdf4; padding: 0.75rem; border-radius: var(--radius); border: 1px solid #86efac;">
+                                                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+                                                    <span style="color: #f59e0b;">
+                                                        @for($i = 1; $i <= 5; $i++)
+                                                            <i class="fas fa-star" style="opacity: {{ $i <= $existingReview->rating ? 1 : 0.3 }};"></i>
+                                                        @endfor
+                                                    </span>
+                                                    <span style="color: #16a34a; font-size: 0.85rem;"><i class="fas fa-check-circle"></i> Sudah direview</span>
+                                                </div>
+                                                @if($existingReview->title)
+                                                    <strong style="font-size: 0.9rem;">{{ $existingReview->title }}</strong>
+                                                @endif
+                                            </div>
+                                        @else
+                                            <button type="button" class="btn btn-outline btn-sm" onclick="toggleReviewForm({{ $item->ID_OrderItems }})">
+                                                <i class="fas fa-star"></i> Beri Ulasan
+                                            </button>
+                                            
+                                            <div id="review-form-{{ $item->ID_OrderItems }}" style="display: none; margin-top: 1rem; padding: 1rem; background: var(--light); border-radius: var(--radius);">
+                                                <form action="{{ route('products.review', $productId) }}" method="POST">
+                                                    @csrf
+                                                    <input type="hidden" name="order_id" value="{{ $order->ID_Orders }}">
+                                                    
+                                                    <div class="form-group" style="margin-bottom: 1rem;">
+                                                        <label class="form-label">Rating *</label>
+                                                        <div class="star-rating-input" data-item="{{ $item->ID_OrderItems }}" style="font-size: 1.5rem; cursor: pointer;">
+                                                            @for($i = 1; $i <= 5; $i++)
+                                                                <i class="far fa-star" data-rating="{{ $i }}" onclick="setItemRating({{ $item->ID_OrderItems }}, {{ $i }})" 
+                                                                   style="color: #f59e0b; transition: 0.2s;"></i>
+                                                            @endfor
+                                                        </div>
+                                                        <input type="hidden" name="rating" id="rating-{{ $item->ID_OrderItems }}" required>
+                                                    </div>
+                                                    
+                                                    <div class="form-group" style="margin-bottom: 1rem;">
+                                                        <label class="form-label">Judul (Opsional)</label>
+                                                        <input type="text" name="title" class="form-control" placeholder="Ringkasan ulasan" maxlength="255">
+                                                    </div>
+                                                    
+                                                    <div class="form-group" style="margin-bottom: 1rem;">
+                                                        <label class="form-label">Ulasan *</label>
+                                                        <textarea name="review" class="form-control" rows="3" placeholder="Bagikan pengalaman Anda..." required minlength="10"></textarea>
+                                                    </div>
+                                                    
+                                                    <button type="submit" class="btn btn-primary btn-sm">
+                                                        <i class="fas fa-paper-plane"></i> Kirim Ulasan
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        @endif
+                                    @endif
                                 </div>
                             </div>
                         @endforeach
@@ -140,5 +205,33 @@
         }
     }
 </style>
+@endpush
+
+@push('scripts')
+<script>
+    function toggleReviewForm(itemId) {
+        const form = document.getElementById('review-form-' + itemId);
+        if (form.style.display === 'none') {
+            form.style.display = 'block';
+        } else {
+            form.style.display = 'none';
+        }
+    }
+
+    function setItemRating(itemId, rating) {
+        document.getElementById('rating-' + itemId).value = rating;
+        const container = document.querySelector('.star-rating-input[data-item="' + itemId + '"]');
+        const stars = container.querySelectorAll('i');
+        stars.forEach((star, index) => {
+            if (index < rating) {
+                star.classList.remove('far');
+                star.classList.add('fas');
+            } else {
+                star.classList.remove('fas');
+                star.classList.add('far');
+            }
+        });
+    }
+</script>
 @endpush
 @endsection

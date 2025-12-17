@@ -17,6 +17,8 @@ class ReviewController extends Controller
 
     /**
      * Store a newly created review
+     * 
+     * Reviews can ONLY be submitted for products from DELIVERED orders
      */
     public function store(Request $request, $productId)
     {
@@ -24,6 +26,7 @@ class ReviewController extends Controller
             'rating' => 'required|integer|min:1|max:5',
             'title' => 'nullable|string|max:255',
             'review' => 'required|string|min:10|max:2000',
+            'order_id' => 'nullable|integer',
         ]);
 
         $product = Product::findOrFail($productId);
@@ -38,22 +41,26 @@ class ReviewController extends Controller
             return back()->with('error', 'Anda sudah memberikan review untuk produk ini.');
         }
 
-        // Check if customer has purchased this product (verified purchase)
-        $hasPurchased = Order::where('ID_Customers', $customerId)
-            ->whereIn('Status', [Order::STATUS_PROCESSING, Order::STATUS_SHIPPED, Order::STATUS_DELIVERED])
+        // REQUIRE: Customer must have a DELIVERED order containing this product
+        $deliveredOrder = Order::where('ID_Customers', $customerId)
+            ->where('Status', Order::STATUS_DELIVERED)
             ->whereHas('items.variant', function($q) use ($productId) {
                 $q->where('ID_Product', $productId);
             })
-            ->exists();
+            ->first();
+
+        if (!$deliveredOrder) {
+            return back()->with('error', 'Anda harus membeli dan menerima produk ini terlebih dahulu sebelum memberikan ulasan.');
+        }
 
         ProductReview::create([
             'ID_Products' => $productId,
             'ID_Customers' => $customerId,
-            'ID_Orders' => null,
+            'ID_Orders' => $request->order_id ?? $deliveredOrder->ID_Orders,
             'rating' => $request->rating,
             'title' => $request->title,
             'review' => $request->review,
-            'is_verified_purchase' => $hasPurchased,
+            'is_verified_purchase' => true, // Always true since we require delivered order
             'is_approved' => null, // Pending approval
         ]);
 
