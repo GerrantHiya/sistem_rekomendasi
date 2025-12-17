@@ -195,12 +195,12 @@ class HybridRecommendationService
             $startDate = now()->subDays($days);
 
             // Get products ordered in the last N days with order counts
-            $trendingIds = OrderItem::join('Product_Variants', 'Order_Items.ID_Variant', '=', 'Product_Variants.ID_Variants')
-                ->join('Orders', 'Order_Items.ID_Orders', '=', 'Orders.ID_Orders')
-                ->where('Orders.place_at', '>=', $startDate)
-                ->whereIn('Orders.Status', [Order::STATUS_PROCESSING, Order::STATUS_SHIPPED, Order::STATUS_DELIVERED])
-                ->select('Product_Variants.ID_Product', DB::raw('COUNT(*) as order_count'))
-                ->groupBy('Product_Variants.ID_Product')
+            $trendingIds = OrderItem::join('product_variants', 'order_items.ID_Variant', '=', 'product_variants.ID_Variants')
+                ->join('orders', 'order_items.ID_Orders', '=', 'orders.ID_Orders')
+                ->where('orders.place_at', '>=', $startDate)
+                ->whereIn('orders.Status', [Order::STATUS_PROCESSING, Order::STATUS_SHIPPED, Order::STATUS_DELIVERED])
+                ->select('product_variants.ID_Product', DB::raw('COUNT(*) as order_count'))
+                ->groupBy('product_variants.ID_Product')
                 ->orderByDesc('order_count')
                 ->limit($limit * 2)
                 ->pluck('order_count', 'ID_Product');
@@ -306,12 +306,12 @@ class HybridRecommendationService
      */
     private function getUserPurchasedProductIds(int $customerId): Collection
     {
-        return OrderItem::join('Product_Variants', 'Order_Items.ID_Variant', '=', 'Product_Variants.ID_Variants')
-            ->join('Orders', 'Order_Items.ID_Orders', '=', 'Orders.ID_Orders')
-            ->where('Orders.ID_Customers', $customerId)
-            ->whereIn('Orders.Status', [Order::STATUS_PROCESSING, Order::STATUS_SHIPPED, Order::STATUS_DELIVERED])
+        return OrderItem::join('product_variants', 'order_items.ID_Variant', '=', 'product_variants.ID_Variants')
+            ->join('orders', 'order_items.ID_Orders', '=', 'orders.ID_Orders')
+            ->where('orders.ID_Customers', $customerId)
+            ->whereIn('orders.Status', [Order::STATUS_PROCESSING, Order::STATUS_SHIPPED, Order::STATUS_DELIVERED])
             ->distinct()
-            ->pluck('Product_Variants.ID_Product');
+            ->pluck('product_variants.ID_Product');
     }
 
     /**
@@ -323,11 +323,11 @@ class HybridRecommendationService
         
         return Cache::remember($cacheKey, $this->cacheDuration, function () {
             // Purchase counts per product
-            $purchaseCounts = OrderItem::join('Product_Variants', 'Order_Items.ID_Variant', '=', 'Product_Variants.ID_Variants')
-                ->join('Orders', 'Order_Items.ID_Orders', '=', 'Orders.ID_Orders')
-                ->whereIn('Orders.Status', [Order::STATUS_PROCESSING, Order::STATUS_SHIPPED, Order::STATUS_DELIVERED])
-                ->select('Product_Variants.ID_Product', DB::raw('COUNT(*) as purchase_count'))
-                ->groupBy('Product_Variants.ID_Product')
+            $purchaseCounts = OrderItem::join('product_variants', 'order_items.ID_Variant', '=', 'product_variants.ID_Variants')
+                ->join('orders', 'order_items.ID_Orders', '=', 'orders.ID_Orders')
+                ->whereIn('orders.Status', [Order::STATUS_PROCESSING, Order::STATUS_SHIPPED, Order::STATUS_DELIVERED])
+                ->select('product_variants.ID_Product', DB::raw('COUNT(*) as purchase_count'))
+                ->groupBy('product_variants.ID_Product')
                 ->pluck('purchase_count', 'ID_Product')
                 ->toArray();
 
@@ -359,13 +359,13 @@ class HybridRecommendationService
      */
     private function getUserCategoryAffinities(int $customerId): array
     {
-        $categoryCounts = OrderItem::join('Product_Variants', 'Order_Items.ID_Variant', '=', 'Product_Variants.ID_Variants')
-            ->join('Products', 'Product_Variants.ID_Product', '=', 'Products.ID_Products')
-            ->join('Orders', 'Order_Items.ID_Orders', '=', 'Orders.ID_Orders')
-            ->where('Orders.ID_Customers', $customerId)
-            ->whereIn('Orders.Status', [Order::STATUS_PROCESSING, Order::STATUS_SHIPPED, Order::STATUS_DELIVERED])
-            ->select('Products.ID_Categories', DB::raw('COUNT(*) as count'))
-            ->groupBy('Products.ID_Categories')
+        $categoryCounts = OrderItem::join('product_variants', 'order_items.ID_Variant', '=', 'product_variants.ID_Variants')
+            ->join('products', 'product_variants.ID_Product', '=', 'products.ID_Products')
+            ->join('orders', 'order_items.ID_Orders', '=', 'orders.ID_Orders')
+            ->where('orders.ID_Customers', $customerId)
+            ->whereIn('orders.Status', [Order::STATUS_PROCESSING, Order::STATUS_SHIPPED, Order::STATUS_DELIVERED])
+            ->select('products.ID_Categories', DB::raw('COUNT(*) as count'))
+            ->groupBy('products.ID_Categories')
             ->pluck('count', 'ID_Categories')
             ->toArray();
 

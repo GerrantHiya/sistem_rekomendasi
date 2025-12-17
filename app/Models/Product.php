@@ -9,7 +9,7 @@ use App\Services\IdHasher;
 
 class Product extends Model
 {
-    protected $table = 'Products';
+    protected $table = 'products';
     protected $primaryKey = 'ID_Products';
     public $timestamps = false;
 
@@ -103,8 +103,8 @@ class Product extends Model
      */
     public function getTotalPurchasesAttribute(): int
     {
-        return OrderItem::join('Product_Variants', 'Order_Items.ID_Variant', '=', 'Product_Variants.ID_Variants')
-            ->where('Product_Variants.ID_Product', $this->ID_Products)
+        return OrderItem::join('product_variants', 'order_items.ID_Variant', '=', 'product_variants.ID_Variants')
+            ->where('product_variants.ID_Product', $this->ID_Products)
             ->count();
     }
 
