@@ -129,9 +129,7 @@
                     <h2 class="section-title" style="margin-bottom: 0;">Rekomendasi Untuk Anda</h2>
                     <p class="section-subtitle" style="margin-bottom: 0; margin-top: 0.25rem;">Berdasarkan riwayat belanja Anda</p>
                 </div>
-                <span class="tfidf-badge">
-                    <i class="fas fa-brain"></i> Powered by Hybrid AI
-                </span>
+
             </div>
             
             <div class="products-grid">
@@ -205,13 +203,7 @@
                 <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem;">Produk Original</h3>
                 <p style="color: var(--gray-light);">100% produk asli dengan garansi resmi</p>
             </div>
-            <div class="fade-in">
-                <div style="font-size: 3rem; margin-bottom: 1rem;">
-                    <i class="fas fa-brain"></i>
-                </div>
-                <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem;">Smart AI Recommendation</h3>
-                <p style="color: var(--gray-light);">Sistem cerdas untuk menemukan produk yang tepat</p>
-            </div>
+
             <div class="fade-in">
                 <div style="font-size: 3rem; margin-bottom: 1rem;">
                     <i class="fas fa-headset"></i>
