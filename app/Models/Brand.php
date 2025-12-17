@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Brand extends Model
 {
-    protected $table = 'brands';
+    protected $table = 'Brands';
     protected $primaryKey = 'ID_Brand';
     public $timestamps = false;
 

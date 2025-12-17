@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Customer extends Authenticatable
 {
-    protected $table = 'customers';
+    protected $table = 'Customers';
     protected $primaryKey = 'ID_Customers';
     public $timestamps = false;
 

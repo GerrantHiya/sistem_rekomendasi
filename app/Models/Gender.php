@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Gender extends Model
 {
-    protected $table = 'gender';
+    protected $table = 'Gender';
     protected $primaryKey = 'ID_Gender';
     public $timestamps = false;
 

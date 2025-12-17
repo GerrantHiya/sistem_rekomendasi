@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Order extends Model
 {
-    protected $table = 'orders';
+    protected $table = 'Orders';
     protected $primaryKey = 'ID_Orders';
     public $timestamps = false;
 

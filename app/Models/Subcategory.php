@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Subcategory extends Model
 {
-    protected $table = 'subcategories';
+    protected $table = 'SubCategories';
     protected $primaryKey = 'ID_SubCategories';
     public $timestamps = false;
 

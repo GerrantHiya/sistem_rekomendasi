@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Category extends Model
 {
-    protected $table = 'categories';
+    protected $table = 'Categories';
     protected $primaryKey = 'ID_Categories';
     public $timestamps = false;
 

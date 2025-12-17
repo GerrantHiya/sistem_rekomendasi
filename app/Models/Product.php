@@ -9,7 +9,7 @@ use App\Services\IdHasher;
 
 class Product extends Model
 {
-    protected $table = 'products';
+    protected $table = 'Products';
     protected $primaryKey = 'ID_Products';
     public $timestamps = false;
 

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class OrderItem extends Model
 {
-    protected $table = 'order_items';
+    protected $table = 'Order_Items';
     protected $primaryKey = 'ID_Order_Items';
     public $timestamps = false;
 

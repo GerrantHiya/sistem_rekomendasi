@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Shipment extends Model
 {
-    protected $table = 'shipments';
+    protected $table = 'Shipments';
     protected $primaryKey = 'ID_Shipments';
     public $timestamps = false;
 

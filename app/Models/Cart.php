@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Cart extends Model
 {
-    protected $table = 'cart';
+    protected $table = 'Cart';
     protected $primaryKey = 'ID_Cart';
     public $timestamps = false;
 
