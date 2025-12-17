@@ -84,7 +84,7 @@ class ProductController extends Controller
             if ($request->hasFile("variants.{$index}.images")) {
                 foreach ($request->file("variants.{$index}.images") as $image) {
                     $filename = Str::random(40) . '.' . $image->getClientOriginalExtension();
-                    $image->storeAs('public/products', $filename);
+                    $image->storeAs('', $filename, 'products');
                     
                     ProductImage::create([
                         'image' => $filename,
@@ -156,7 +156,7 @@ class ProductController extends Controller
         // Delete associated images
         foreach ($product->variants as $variant) {
             foreach ($variant->images as $image) {
-                Storage::delete('public/products/' . $image->image);
+                Storage::disk('products')->delete($image->image);
                 $image->delete();
             }
             $variant->delete();
@@ -193,7 +193,7 @@ class ProductController extends Controller
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
                 $filename = Str::random(40) . '.' . $image->getClientOriginalExtension();
-                $image->storeAs('public/products', $filename);
+                $image->storeAs('', $filename, 'products');
                 
                 ProductImage::create([
                     'image' => $filename,
@@ -218,7 +218,7 @@ class ProductController extends Controller
         }
         
         // Delete from storage
-        Storage::delete('public/products/' . $image->image);
+        Storage::disk('products')->delete($image->image);
         
         // Delete from database
         $image->delete();
