@@ -1071,7 +1071,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; {{ date('Y') }} Fit & Go. All rights reserved. Powered by Hybrid AI Recommendation System.</p>
+                <p>&copy; {{ date('Y') }} Fit & Go | All rights reserved.</p>
             </div>
         </div>
     </footer>
