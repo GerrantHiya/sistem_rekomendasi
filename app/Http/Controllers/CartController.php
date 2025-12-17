@@ -30,7 +30,7 @@ class CartController extends Controller
     public function add(Request $request)
     {
         $request->validate([
-            'variant_id' => 'required|exists:product_variants,ID_Variants',
+            'variant_id' => 'required|exists:Product_Variants,ID_Variants',
             'quantity' => 'required|integer|min:1'
         ]);
 

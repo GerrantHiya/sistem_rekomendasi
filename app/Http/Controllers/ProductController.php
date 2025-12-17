@@ -65,10 +65,10 @@ class ProductController extends Controller
         $sort = $request->get('sort', 'newest');
         switch ($sort) {
             case 'price_low':
-                $query->orderByRaw('(SELECT MIN(price) FROM product_variants WHERE product_variants.ID_Product = products.ID_Products) ASC');
+                $query->orderByRaw('(SELECT MIN(price) FROM Product_Variants WHERE Product_Variants.ID_Product = Products.ID_Products) ASC');
                 break;
             case 'price_high':
-                $query->orderByRaw('(SELECT MIN(price) FROM product_variants WHERE product_variants.ID_Product = products.ID_Products) DESC');
+                $query->orderByRaw('(SELECT MIN(price) FROM Product_Variants WHERE Product_Variants.ID_Product = Products.ID_Products) DESC');
                 break;
             case 'name_asc':
                 $query->orderBy('Name', 'asc');
@@ -84,7 +84,7 @@ class ProductController extends Controller
                 break;
             case 'popular':
                 $query->withCount(['variants as total_orders' => function($q) {
-                    $q->join('order_items', 'product_variants.ID_Variants', '=', 'order_items.ID_Variant');
+                    $q->join('Order_Items', 'Product_Variants.ID_Variants', '=', 'Order_Items.ID_Variant');
                 }])
                 ->orderByDesc('total_orders');
                 break;
