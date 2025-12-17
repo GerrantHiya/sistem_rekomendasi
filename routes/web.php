@@ -63,7 +63,8 @@ Route::middleware('auth:customer')->group(function () {
     Route::post('/orders/{id}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
     
     // Reviews
-    Route::post('/products/{id}/review', [\App\Http\Controllers\ReviewController::class, 'store'])->name('products.review');
+    Route::get('/reviews/create', [\App\Http\Controllers\ReviewController::class, 'create'])->name('reviews.create');
+    Route::post('/reviews', [\App\Http\Controllers\ReviewController::class, 'store'])->name('reviews.store');
 });
 
 // Admin Routes

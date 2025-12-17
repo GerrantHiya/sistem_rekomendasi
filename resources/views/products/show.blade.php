@@ -328,25 +328,12 @@
         input.value = parseInt(input.value) + 1;
     }
     
+    
     function decrementQty() {
         const input = document.getElementById('quantity');
         if (parseInt(input.value) > 1) {
             input.value = parseInt(input.value) - 1;
         }
-    }
-
-    function setRating(rating) {
-        document.getElementById('rating-input').value = rating;
-        const stars = document.querySelectorAll('.star-rating-input i');
-        stars.forEach((star, index) => {
-            if (index < rating) {
-                star.classList.remove('far');
-                star.classList.add('fas');
-            } else {
-                star.classList.remove('fas');
-                star.classList.add('far');
-            }
-        });
     }
 </script>
 @endpush
