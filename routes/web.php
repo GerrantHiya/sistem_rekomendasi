@@ -61,6 +61,9 @@ Route::middleware('auth:customer')->group(function () {
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
     Route::post('/orders/{id}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
+    
+    // Reviews
+    Route::post('/products/{id}/review', [\App\Http\Controllers\ReviewController::class, 'store'])->name('products.review');
 });
 
 // Admin Routes
@@ -106,5 +109,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Sizes
         Route::resource('sizes', \App\Http\Controllers\Admin\SizeController::class)->except(['show', 'destroy']);
         Route::get('/sizes/{id}/delete', [\App\Http\Controllers\Admin\SizeController::class, 'destroy'])->name('sizes.destroy');
+        
+        // Reviews
+        Route::get('/reviews', [\App\Http\Controllers\Admin\ReviewController::class, 'index'])->name('reviews.index');
+        Route::get('/reviews/{id}', [\App\Http\Controllers\Admin\ReviewController::class, 'show'])->name('reviews.show');
+        Route::post('/reviews/{id}/approve', [\App\Http\Controllers\Admin\ReviewController::class, 'approve'])->name('reviews.approve');
+        Route::post('/reviews/{id}/reject', [\App\Http\Controllers\Admin\ReviewController::class, 'reject'])->name('reviews.reject');
+        Route::get('/reviews/{id}/delete', [\App\Http\Controllers\Admin\ReviewController::class, 'destroy'])->name('reviews.destroy');
     });
 });

@@ -344,6 +344,15 @@
                 <a href="{{ route('admin.customers.index') }}" class="nav-link {{ request()->routeIs('admin.customers.*') ? 'active' : '' }}">
                     <i class="fas fa-users"></i> Pelanggan
                 </a>
+                @php
+                    $pendingReviewCount = \App\Models\ProductReview::whereNull('is_approved')->count();
+                @endphp
+                <a href="{{ route('admin.reviews.index') }}" class="nav-link {{ request()->routeIs('admin.reviews.*') ? 'active' : '' }}">
+                    <i class="fas fa-star"></i> Reviews
+                    @if($pendingReviewCount > 0)
+                        <span style="background: #f59e0b; color: white; padding: 0.1rem 0.4rem; border-radius: 9999px; font-size: 0.7rem; margin-left: auto;">{{ $pendingReviewCount }}</span>
+                    @endif
+                </a>
                 
                 <div class="nav-section">Lainnya</div>
                 <a href="{{ route('home') }}" class="nav-link" target="_blank">
