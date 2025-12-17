@@ -9,7 +9,7 @@
     <div class="container">
         <div class="hero-content fade-in">
             <h1>Start Your Fitness Journey</h1>
-            <p>Temukan perlengkapan olahraga terbaik dengan sistem rekomendasi AI. Kami membantu menemukan produk yang sempurna untuk gaya hidup aktif Anda.</p>
+            <p>Find your style with our Recommendation System</p>
             <div style="display: flex; gap: 1rem; justify-content: center;">
                 <a href="{{ route('products.index') }}" class="btn btn-primary btn-lg">
                     <i class="fas fa-shopping-bag"></i> Mulai Belanja
