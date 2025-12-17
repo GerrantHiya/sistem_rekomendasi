@@ -8,7 +8,7 @@ use App\Services\IdHasher;
 
 class ProductImage extends Model
 {
-    protected $table = 'product_image';
+    protected $table = 'Product_Image';
     protected $primaryKey = 'ID_Image';
     public $timestamps = false;
 
