@@ -55,9 +55,36 @@ class ProductVariant extends Model
         return $this->hasMany(OrderItem::class, 'ID_Variant', 'ID_Variants');
     }
 
+    /**
+     * Get the size for this variant
+     */
+    public function size(): BelongsTo
+    {
+        return $this->belongsTo(Size::class, 'ID_Size', 'ID_Size');
+    }
+
     public function getFormattedPriceAttribute()
     {
         return 'Rp ' . number_format($this->price, 0, ',', '.');
+    }
+
+    /**
+     * Get size name for display
+     */
+    public function getSizeNameAttribute(): string
+    {
+        if ($this->ID_Size && $this->size) {
+            return $this->size->name;
+        }
+        return 'N/A';
+    }
+
+    /**
+     * Check if this variant has a valid size
+     */
+    public function getHasSizeAttribute(): bool
+    {
+        return $this->ID_Size > 0 && $this->size && !$this->size->is_one_size;
     }
 }
 
