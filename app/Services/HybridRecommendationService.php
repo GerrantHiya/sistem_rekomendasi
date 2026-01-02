@@ -262,7 +262,7 @@ class HybridRecommendationService
             $sameSubcategory = Product::with(['brand', 'category', 'subcategory', 'gender', 'variants.images', 'approvedReviews'])
                 ->where('ID_Products', '!=', $product->ID_Products)
                 ->where('ID_Categories', $product->ID_Categories)
-                ->where('ID_Sub_Categories', $product->ID_Sub_Categories)
+                ->where('ID_SubCategories', $product->ID_SubCategories)
                 ->inRandomOrder()
                 ->limit($limit)
                 ->get();
