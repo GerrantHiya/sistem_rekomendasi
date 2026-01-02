@@ -250,6 +250,90 @@ class HybridRecommendationService
     }
 
     /**
+     * Get similar products based on CATEGORY (not TF-IDF)
+     * Prioritizes: same subcategory > same category > same gender
+     */
+    public function getCategorySimilarProducts(Product $product, int $limit = 4): Collection
+    {
+        $cacheKey = "category_similar_{$product->ID_Products}_{$limit}";
+        
+        return Cache::remember($cacheKey, $this->cacheDuration, function () use ($product, $limit) {
+            // First try: same category AND same subcategory
+            $sameSubcategory = Product::with(['brand', 'category', 'subcategory', 'gender', 'variants.images', 'approvedReviews'])
+                ->where('ID_Products', '!=', $product->ID_Products)
+                ->where('ID_Categories', $product->ID_Categories)
+                ->where('ID_Sub_Categories', $product->ID_Sub_Categories)
+                ->inRandomOrder()
+                ->limit($limit)
+                ->get();
+
+            if ($sameSubcategory->count() >= $limit) {
+                return $this->addRatingInfo($sameSubcategory);
+            }
+
+            // Second try: same category (different subcategory)
+            $remaining = $limit - $sameSubcategory->count();
+            $sameCategory = Product::with(['brand', 'category', 'subcategory', 'gender', 'variants.images', 'approvedReviews'])
+                ->where('ID_Products', '!=', $product->ID_Products)
+                ->where('ID_Categories', $product->ID_Categories)
+                ->whereNotIn('ID_Products', $sameSubcategory->pluck('ID_Products'))
+                ->inRandomOrder()
+                ->limit($remaining)
+                ->get();
+
+            $combined = $sameSubcategory->merge($sameCategory);
+
+            if ($combined->count() >= $limit) {
+                return $this->addRatingInfo($combined);
+            }
+
+            // Third fallback: same gender
+            $remaining = $limit - $combined->count();
+            $sameGender = Product::with(['brand', 'category', 'subcategory', 'gender', 'variants.images', 'approvedReviews'])
+                ->where('ID_Products', '!=', $product->ID_Products)
+                ->where('ID_Gender', $product->ID_Gender)
+                ->whereNotIn('ID_Products', $combined->pluck('ID_Products'))
+                ->inRandomOrder()
+                ->limit($remaining)
+                ->get();
+
+            return $this->addRatingInfo($combined->merge($sameGender));
+        });
+    }
+
+    /**
+     * Add rating info to products collection
+     */
+    private function addRatingInfo(Collection $products): Collection
+    {
+        foreach ($products as $product) {
+            $product->avg_rating = $product->approvedReviews->avg('rating') ?? 0;
+            $product->review_count = $product->approvedReviews->count();
+        }
+        return $products;
+    }
+
+    /**
+     * Get newest products (recently added)
+     */
+    public function getNewestProducts(int $limit = 8): Collection
+    {
+        $cacheKey = "newest_products_{$limit}";
+        
+        return Cache::remember($cacheKey, 300, function () use ($limit) { // 5 min cache
+            return Product::with(['brand', 'category', 'subcategory', 'gender', 'variants.images', 'approvedReviews'])
+                ->orderByDesc('ID_Products') // Newest first (assuming auto-increment ID)
+                ->limit($limit)
+                ->get()
+                ->map(function ($product) {
+                    $product->avg_rating = $product->approvedReviews->avg('rating') ?? 0;
+                    $product->review_count = $product->approvedReviews->count();
+                    return $product;
+                });
+        });
+    }
+
+    /**
      * Search products with hybrid ranking
      */
     public function searchProducts(string $query, int $limit = 20): Collection

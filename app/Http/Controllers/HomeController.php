@@ -42,13 +42,17 @@ class HomeController extends Controller
         // Get top rated products
         $topRatedProducts = $this->recommendationService->getTopRatedProducts(4);
 
+        // Get newest products
+        $newestProducts = $this->recommendationService->getNewestProducts(8);
+
         return view('home', compact(
             'featuredProducts', 
             'categories', 
             'brands', 
             'recommendations',
             'trendingProducts',
-            'topRatedProducts'
+            'topRatedProducts',
+            'newestProducts'
         ));
     }
 

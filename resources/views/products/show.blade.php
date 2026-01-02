@@ -257,22 +257,19 @@
     </div>
 </section>
 
-<!-- Similar Products (TF-IDF Recommendations) -->
+<!-- Produk Serupa (Berdasarkan Kategori) -->
 @if($similarProducts->count() > 0)
 <section class="section" style="background: var(--light);">
     <div class="container">
         <div class="recommendation-section" style="background: white;">
             <div class="recommendation-header">
                 <div class="recommendation-icon">
-                    <i class="fas fa-magic"></i>
+                    <i class="fas fa-layer-group"></i>
                 </div>
                 <div>
                     <h2 class="section-title" style="margin-bottom: 0;">Produk Serupa</h2>
-                    <p class="section-subtitle" style="margin-bottom: 0; margin-top: 0.25rem;">Berdasarkan kemiripan konten (TF-IDF Cosine Similarity)</p>
+                    <p class="section-subtitle" style="margin-bottom: 0; margin-top: 0.25rem;">Produk dengan kategori yang sama</p>
                 </div>
-                <span class="tfidf-badge">
-                    <i class="fas fa-brain"></i> TF-IDF Algorithm
-                </span>
             </div>
             
             <div class="products-grid">
@@ -284,9 +281,6 @@
                             @else
                                 <img src="https://via.placeholder.com/400x400?text={{ urlencode($similar->Name) }}" alt="{{ $similar->Name }}">
                             @endif
-                            <span class="similarity-score">
-                                <i class="fas fa-chart-line"></i> {{ $similar->similarity_score }}% Mirip
-                            </span>
                             <div class="product-actions">
                                 <a href="{{ route('products.show', $similar->ID_Products) }}" class="product-action-btn" title="Lihat Detail">
                                     <i class="fas fa-eye"></i>
@@ -297,8 +291,16 @@
                             <div class="product-brand">{{ $similar->brand->name ?? '-' }}</div>
                             <a href="{{ route('products.show', $similar->ID_Products) }}" class="product-name">{{ $similar->Name }}</a>
                             <div class="product-category">
-                                {{ $similar->category->name ?? '' }} • {{ $similar->gender->name ?? '' }}
+                                {{ $similar->category->name ?? '' }} • {{ $similar->subcategory->name ?? '' }}
                             </div>
+                            @if($similar->review_count > 0)
+                            <div style="color: #f59e0b; font-size: 0.85rem; margin-bottom: 0.25rem;">
+                                @for($i = 1; $i <= 5; $i++)
+                                    <i class="fas fa-star" style="opacity: {{ $i <= round($similar->avg_rating) ? 1 : 0.3 }};"></i>
+                                @endfor
+                                <span style="color: var(--gray); margin-left: 0.25rem;">({{ $similar->review_count }})</span>
+                            </div>
+                            @endif
                             <div class="product-price">
                                 Rp {{ number_format($similar->min_price, 0, ',', '.') }}
                             </div>

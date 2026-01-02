@@ -185,6 +185,61 @@
     </div>
 </section>
 
+<!-- Produk Terbaru Section -->
+@if($newestProducts->count() > 0)
+<section class="section" style="background: linear-gradient(180deg, white 0%, var(--light) 100%);">
+    <div class="container">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;">
+            <div>
+                <h2 class="section-title"><i class="fas fa-clock" style="color: var(--primary); margin-right: 0.5rem;"></i> Produk Terbaru</h2>
+                <p class="section-subtitle" style="margin-bottom: 0;">Koleksi produk terbaru yang baru ditambahkan</p>
+            </div>
+            <a href="{{ route('products.index') }}" class="btn btn-outline">
+                Lihat Semua <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        
+        <div class="products-grid">
+            @foreach($newestProducts as $product)
+                <div class="product-card fade-in">
+                    <div class="product-image">
+                        @if($product->first_image)
+                            <img src="{{ asset('storage/products/' . $product->first_image) }}" alt="{{ $product->Name }}">
+                        @else
+                            <img src="https://via.placeholder.com/400x400?text={{ urlencode($product->Name) }}" alt="{{ $product->Name }}">
+                        @endif
+                        <span class="product-badge" style="background: var(--success);">Baru</span>
+                        <div class="product-actions">
+                            <a href="{{ route('products.show', $product->ID_Products) }}" class="product-action-btn" title="Lihat Detail">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-brand">{{ $product->brand->name ?? '-' }}</div>
+                        <a href="{{ route('products.show', $product->ID_Products) }}" class="product-name">{{ $product->Name }}</a>
+                        <div class="product-category">
+                            {{ $product->category->name ?? '' }} • {{ $product->gender->name ?? '' }}
+                        </div>
+                        @if($product->review_count > 0)
+                        <div style="color: #f59e0b; font-size: 0.85rem; margin-bottom: 0.25rem;">
+                            @for($i = 1; $i <= 5; $i++)
+                                <i class="fas fa-star" style="opacity: {{ $i <= round($product->avg_rating) ? 1 : 0.3 }};"></i>
+                            @endfor
+                            <span style="color: var(--gray); margin-left: 0.25rem;">({{ $product->review_count }})</span>
+                        </div>
+                        @endif
+                        <div class="product-price">
+                            Rp {{ number_format($product->min_price, 0, ',', '.') }}
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+@endif
+
 <!-- Features Section -->
 <section class="section" style="background: var(--gradient-dark); color: white;">
     <div class="container">
