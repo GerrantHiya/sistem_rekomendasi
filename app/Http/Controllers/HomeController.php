@@ -64,6 +64,15 @@ class HomeController extends Controller
             return redirect()->route('home');
         }
 
+        // Track search history if user is logged in
+        if (auth()->guard('customer')->check()) {
+            \App\Models\SearchHistory::create([
+                'ID_Customers' => auth()->guard('customer')->id(),
+                'search_query' => $query,
+                'searched_at' => now(),
+            ]);
+        }
+
         // Use Hybrid search (TF-IDF + Rating + Popularity)
         $products = $this->recommendationService->searchProducts($query, 20);
 

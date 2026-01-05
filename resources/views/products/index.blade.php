@@ -32,8 +32,8 @@
         <div style="display: grid; grid-template-columns: 280px 1fr; gap: 2rem;">
             <!-- Sidebar Filters -->
             <aside>
-                <div class="card" style="position: sticky; top: 100px;">
-                    <div class="card-header">
+            <div class="card" style="position: sticky; top: 100px; max-height: calc(100vh - 150px); overflow-y: auto;">
+                    <div class="card-header" style="position: sticky; top: 0; background: white; z-index: 1;">
                         <i class="fas fa-filter"></i> Filter
                     </div>
                     <div class="card-body">
@@ -149,6 +149,18 @@
                                     <div class="product-category">
                                         {{ $product->category->name ?? '' }} • {{ $product->gender->name ?? '' }}
                                     </div>
+                                    @php
+                                        $avgRating = $product->approvedReviews->avg('rating') ?? 0;
+                                        $reviewCount = $product->approvedReviews->count();
+                                    @endphp
+                                    @if($reviewCount > 0)
+                                    <div style="color: #f59e0b; font-size: 0.85rem; margin-bottom: 0.25rem;">
+                                        @for($i = 1; $i <= 5; $i++)
+                                            <i class="fas fa-star" style="opacity: {{ $i <= round($avgRating) ? 1 : 0.3 }};"></i>
+                                        @endfor
+                                        <span style="color: var(--gray); margin-left: 0.25rem;">({{ $reviewCount }})</span>
+                                    </div>
+                                    @endif
                                     <div class="product-price">
                                         Rp {{ number_format($product->min_price, 0, ',', '.') }}
                                         @if($product->min_price != $product->max_price)
