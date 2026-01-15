@@ -250,54 +250,22 @@ class HybridRecommendationService
     }
 
     /**
-     * Get similar products based on CATEGORY (not TF-IDF)
-     * Prioritizes: same subcategory > same category > same gender
+     * Get similar products based on CATEGORY only (not subcategory)
      */
-    public function getCategorySimilarProducts(Product $product, int $limit = 4): Collection
+    public function getCategorySimilarProducts(Product $product, int $limit = 3): Collection
     {
         $cacheKey = "category_similar_{$product->ID_Products}_{$limit}";
         
         return Cache::remember($cacheKey, $this->cacheDuration, function () use ($product, $limit) {
-            // First try: same category AND same subcategory
-            $sameSubcategory = Product::with(['brand', 'category', 'subcategory', 'gender', 'variants.images', 'approvedReviews'])
+            // Get products from the SAME CATEGORY only
+            $products = Product::with(['brand', 'category', 'subcategory', 'gender', 'variants.images', 'approvedReviews'])
                 ->where('ID_Products', '!=', $product->ID_Products)
                 ->where('ID_Categories', $product->ID_Categories)
-                ->where('ID_SubCategories', $product->ID_SubCategories)
                 ->inRandomOrder()
                 ->limit($limit)
                 ->get();
 
-            if ($sameSubcategory->count() >= $limit) {
-                return $this->addRatingInfo($sameSubcategory);
-            }
-
-            // Second try: same category (different subcategory)
-            $remaining = $limit - $sameSubcategory->count();
-            $sameCategory = Product::with(['brand', 'category', 'subcategory', 'gender', 'variants.images', 'approvedReviews'])
-                ->where('ID_Products', '!=', $product->ID_Products)
-                ->where('ID_Categories', $product->ID_Categories)
-                ->whereNotIn('ID_Products', $sameSubcategory->pluck('ID_Products'))
-                ->inRandomOrder()
-                ->limit($remaining)
-                ->get();
-
-            $combined = $sameSubcategory->merge($sameCategory);
-
-            if ($combined->count() >= $limit) {
-                return $this->addRatingInfo($combined);
-            }
-
-            // Third fallback: same gender
-            $remaining = $limit - $combined->count();
-            $sameGender = Product::with(['brand', 'category', 'subcategory', 'gender', 'variants.images', 'approvedReviews'])
-                ->where('ID_Products', '!=', $product->ID_Products)
-                ->where('ID_Gender', $product->ID_Gender)
-                ->whereNotIn('ID_Products', $combined->pluck('ID_Products'))
-                ->inRandomOrder()
-                ->limit($remaining)
-                ->get();
-
-            return $this->addRatingInfo($combined->merge($sameGender));
+            return $this->addRatingInfo($products);
         });
     }
 
@@ -314,9 +282,48 @@ class HybridRecommendationService
     }
 
     /**
+     * Get featured products based on user's search history
+     * Falls back to TF-IDF recommendations if no search history
+     */
+    public function getSearchBasedFeaturedProducts(?int $customerId, int $limit = 3): Collection
+    {
+        // If user is logged in, check for search history
+        if ($customerId) {
+            $recentSearches = \App\Models\SearchHistory::where('ID_Customers', $customerId)
+                ->orderByDesc('searched_at')
+                ->limit(5)
+                ->pluck('search_query')
+                ->unique();
+
+            if ($recentSearches->isNotEmpty()) {
+                // Search for products matching recent search queries
+                $products = collect();
+                
+                foreach ($recentSearches as $query) {
+                    if ($products->count() >= $limit) break;
+                    
+                    $searchResults = $this->searchProducts($query, $limit - $products->count());
+                    $products = $products->merge($searchResults)->unique('ID_Products');
+                }
+
+                if ($products->count() > 0) {
+                    return $products->take($limit)->map(function ($product) {
+                        $product->avg_rating = $product->approvedReviews->avg('rating') ?? 0;
+                        $product->review_count = $product->approvedReviews->count();
+                        return $product;
+                    });
+                }
+            }
+        }
+
+        // Fallback: Use TF-IDF based recommendations (top rated products)
+        return $this->getTopRatedProducts($limit);
+    }
+
+    /**
      * Get newest products (recently added)
      */
-    public function getNewestProducts(int $limit = 8): Collection
+    public function getNewestProducts(int $limit = 3): Collection
     {
         $cacheKey = "newest_products_{$limit}";
         

@@ -19,21 +19,21 @@ class HomeController extends Controller
 
     public function index()
     {
-        $featuredProducts = Product::with(['brand', 'category', 'variants.images'])
-            ->limit(8)
-            ->get();
-
         $categories = Category::withCount('products')->get();
-        
         $brands = Brand::withCount('products')->get();
+
+        // Get customer ID if logged in
+        $customerId = auth()->guard('customer')->check() 
+            ? auth()->guard('customer')->id() 
+            : null;
+
+        // Get featured products based on search history (max 3), fallback to TF-IDF
+        $featuredProducts = $this->recommendationService->getSearchBasedFeaturedProducts($customerId, 3);
 
         // Get personalized recommendations if logged in (using Hybrid algorithm)
         $recommendations = collect();
-        if (auth()->guard('customer')->check()) {
-            $recommendations = $this->recommendationService->getPersonalizedRecommendations(
-                auth()->guard('customer')->id(),
-                4
-            );
+        if ($customerId) {
+            $recommendations = $this->recommendationService->getPersonalizedRecommendations($customerId, 4);
         }
 
         // Get trending products for homepage
@@ -42,8 +42,8 @@ class HomeController extends Controller
         // Get top rated products
         $topRatedProducts = $this->recommendationService->getTopRatedProducts(4);
 
-        // Get newest products
-        $newestProducts = $this->recommendationService->getNewestProducts(8);
+        // Get newest products (max 3)
+        $newestProducts = $this->recommendationService->getNewestProducts(3);
 
         return view('home', compact(
             'featuredProducts', 

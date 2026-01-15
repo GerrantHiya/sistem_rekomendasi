@@ -113,8 +113,8 @@ class ProductController extends Controller
             'approvedReviews.customer'
         ])->findOrFail($id);
 
-        // Get similar products based on CATEGORY (same category/subcategory)
-        $similarProducts = $this->recommendationService->getCategorySimilarProducts($product, 4);
+        // Get similar products based on CATEGORY only (max 3)
+        $similarProducts = $this->recommendationService->getCategorySimilarProducts($product, 3);
 
         // Get personalized recommendations if user is logged in
         $personalizedRecommendations = collect();
