@@ -74,7 +74,7 @@
                 <div class="product-card fade-in">
                     <div class="product-image">
                         @if($product->first_image)
-                            <img src="{{ asset('storage/products/' . $product->first_image) }}" alt="{{ $product->Name }}">
+                            <img src="{{ $product->first_image }}" alt="{{ $product->Name }}">
                         @else
                             <img src="https://via.placeholder.com/400x400?text={{ urlencode($product->Name) }}" alt="{{ $product->Name }}">
                         @endif
@@ -137,7 +137,7 @@
                     <div class="product-card fade-in">
                         <div class="product-image">
                             @if($product->first_image)
-                                <img src="{{ asset('storage/products/' . $product->first_image) }}" alt="{{ $product->Name }}">
+                                <img src="{{ $product->first_image }}" alt="{{ $product->Name }}">
                             @else
                                 <img src="https://via.placeholder.com/400x400?text={{ urlencode($product->Name) }}" alt="{{ $product->Name }}">
                             @endif
@@ -204,7 +204,7 @@
                 <div class="product-card fade-in">
                     <div class="product-image">
                         @if($product->first_image)
-                            <img src="{{ asset('storage/products/' . $product->first_image) }}" alt="{{ $product->Name }}">
+                            <img src="{{ $product->first_image }}" alt="{{ $product->Name }}">
                         @else
                             <img src="https://via.placeholder.com/400x400?text={{ urlencode($product->Name) }}" alt="{{ $product->Name }}">
                         @endif

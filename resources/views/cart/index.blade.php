@@ -29,7 +29,7 @@
                                 <!-- Product Image -->
                                 <div style="width: 120px; height: 120px; flex-shrink: 0;">
                                     @if($item->variant && $item->variant->images->count() > 0)
-                                        <img src="{{ asset('storage/products/' . $item->variant->images->first()->image) }}" 
+                                        <img src="{{ $item->variant->images->first()->image }}" 
                                              alt="{{ $item->variant->product->Name ?? '' }}"
                                              style="width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius);">
                                     @else

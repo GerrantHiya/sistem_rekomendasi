@@ -17,3 +17,8 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+
+data_insert.sql
+isi.sql
+product_doang.sql
+

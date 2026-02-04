@@ -29,7 +29,7 @@
                     @endphp
                     
                     @if($images->count() > 0)
-                        <img id="main-image" src="{{ asset('storage/products/' . $images->first()->image) }}" 
+                        <img id="main-image" src="{{ $images->first()->image }}" 
                              alt="{{ $product->Name }}" 
                              style="width: 100%; border-radius: var(--radius); cursor: zoom-in;"
                              onclick="this.style.transform = this.style.transform === 'scale(1.5)' ? 'scale(1)' : 'scale(1.5)';">
@@ -44,7 +44,7 @@
                     <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem;">
                         @foreach($images as $image)
                             <div class="card" style="padding: 0.5rem; cursor: pointer;" onclick="document.getElementById('main-image').src='{{ asset('storage/products/' . $image->image) }}'">
-                                <img src="{{ asset('storage/products/' . $image->image) }}" 
+                                <img src="{{ $image->image }}" 
                                      alt="{{ $product->Name }}" 
                                      style="width: 100%; border-radius: var(--radius); aspect-ratio: 1; object-fit: cover;">
                             </div>
@@ -277,7 +277,7 @@
                     <div class="product-card fade-in">
                         <div class="product-image">
                             @if($similar->first_image)
-                                <img src="{{ asset('storage/products/' . $similar->first_image) }}" alt="{{ $similar->Name }}">
+                                <img src="{{ $similar->first_image }}" alt="{{ $similar->Name }}">
                             @else
                                 <img src="https://via.placeholder.com/400x400?text={{ urlencode($similar->Name) }}" alt="{{ $similar->Name }}">
                             @endif

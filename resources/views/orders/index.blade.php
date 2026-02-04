@@ -37,7 +37,7 @@
                                 @foreach($order->items->take(4) as $item)
                                     <div style="width: 60px; height: 60px; flex-shrink: 0; background: var(--light); border-radius: var(--radius);">
                                         @if($item->variant && $item->variant->images->count() > 0)
-                                            <img src="{{ asset('storage/products/' . $item->variant->images->first()->image) }}" 
+                                            <img src="{{ $item->variant->images->first()->image }}" 
                                                  style="width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius);">
                                         @endif
                                     </div>

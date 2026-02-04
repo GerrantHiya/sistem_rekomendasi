@@ -24,7 +24,7 @@
                 <div style="display: flex; gap: 1rem; padding: 1rem; background: var(--light); border-radius: var(--radius); margin-bottom: 2rem;">
                     <div style="width: 80px; height: 80px; flex-shrink: 0;">
                         @if($variant->images->count() > 0)
-                            <img src="{{ asset('storage/products/' . $variant->images->first()->image) }}" 
+                            <img src="{{ $variant->images->first()->image }}" 
                                  style="width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius);">
                         @else
                             <div style="width: 100%; height: 100%; background: var(--gray-lighter); border-radius: var(--radius);"></div>

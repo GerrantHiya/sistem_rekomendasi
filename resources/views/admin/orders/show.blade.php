@@ -35,7 +35,7 @@
                                     <div style="display: flex; align-items: center; gap: 1rem;">
                                         <div style="width: 50px; height: 50px; background: var(--light); border-radius: 0.5rem; overflow: hidden;">
                                             @if($item->variant && $item->variant->images->count() > 0)
-                                                <img src="{{ asset('storage/products/' . $item->variant->images->first()->image) }}" 
+                                                <img src="{{ $item->variant->images->first()->image }}" 
                                                      style="width: 100%; height: 100%; object-fit: cover;">
                                             @endif
                                         </div>

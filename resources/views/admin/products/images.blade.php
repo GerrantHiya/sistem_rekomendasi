@@ -28,7 +28,7 @@
             @endphp
             @forelse($allImages as $image)
                 <div style="aspect-ratio: 1; background: var(--light); border-radius: 0.5rem; overflow: hidden;">
-                    <img src="{{ asset('storage/products/' . $image->image) }}" 
+                    <img src="{{ $image->image }}" 
                          style="width: 100%; height: 100%; object-fit: cover;">
                 </div>
             @empty
@@ -53,7 +53,7 @@
             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
                 @foreach($variant->images as $image)
                     <div style="background: white; border: 1px solid var(--light); border-radius: 0.75rem; padding: 0.75rem;">
-                        <img src="{{ asset('storage/products/' . $image->image) }}" 
+                        <img src="{{ $image->image }}" 
                              style="width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 0.5rem; display: block; margin-bottom: 0.75rem;">
                         <a href="{{ route('admin.products.images.delete', $image->hashed_id) }}" 
                            onclick="return confirm('Hapus gambar ini?')"
