@@ -83,12 +83,13 @@ class ProductController extends Controller
 
             // Handle images
             if ($request->hasFile("variants.{$index}.images")) {
+                $baseUrl = 'https://rekomendasi.projectdeck.online/storage/products/';
                 foreach ($request->file("variants.{$index}.images") as $image) {
                     $filename = Str::random(40) . '.' . $image->getClientOriginalExtension();
                     $image->storeAs('', $filename, 'products');
                     
                     ProductImage::create([
-                        'image' => $filename,
+                        'image' => $baseUrl . $filename,
                         'ID_Variant' => $variant->ID_Variants
                     ]);
                 }
@@ -158,7 +159,9 @@ class ProductController extends Controller
         // Delete associated images
         foreach ($product->variants as $variant) {
             foreach ($variant->images as $image) {
-                Storage::disk('products')->delete($image->image);
+                // Extract filename from URL
+                $filename = basename($image->image);
+                Storage::disk('products')->delete($filename);
                 $image->delete();
             }
             $variant->delete();
@@ -193,12 +196,13 @@ class ProductController extends Controller
 
         $uploadedCount = 0;
         if ($request->hasFile('images')) {
+            $baseUrl = 'https://rekomendasi.projectdeck.online/storage/products/';
             foreach ($request->file('images') as $image) {
                 $filename = Str::random(40) . '.' . $image->getClientOriginalExtension();
                 $image->storeAs('', $filename, 'products');
                 
                 ProductImage::create([
-                    'image' => $filename,
+                    'image' => $baseUrl . $filename,
                     'ID_Variant' => $variant->ID_Variants
                 ]);
                 $uploadedCount++;
@@ -219,8 +223,9 @@ class ProductController extends Controller
             abort(404);
         }
         
-        // Delete from storage
-        Storage::disk('products')->delete($image->image);
+        // Delete from storage (extract filename from URL)
+        $filename = basename($image->image);
+        Storage::disk('products')->delete($filename);
         
         // Delete from database
         $image->delete();
