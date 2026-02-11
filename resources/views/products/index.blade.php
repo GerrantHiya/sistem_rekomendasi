@@ -115,7 +115,7 @@
             </aside>
 
             <!-- Products Grid -->
-            <div>
+            <div style="min-width: 0; overflow: hidden;">
                 @if($products->count() > 0)
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
                         <p style="color: var(--gray);">
@@ -177,11 +177,37 @@
                         @if($products->previousPageUrl())
                             <a href="{{ $products->previousPageUrl() }}"><i class="fas fa-chevron-left"></i></a>
                         @endif
-                        
-                        @foreach($products->getUrlRange(1, $products->lastPage()) as $page => $url)
-                            <a href="{{ $url }}" class="{{ $page == $products->currentPage() ? 'active' : '' }}">{{ $page }}</a>
+
+                        @php
+                            $currentPage = $products->currentPage();
+                            $lastPage = $products->lastPage();
+                            $pagesToShow = [];
+
+                            // Always show page 1
+                            $pagesToShow[] = 1;
+
+                            // Show pages around current page
+                            for ($i = max(2, $currentPage - 1); $i <= min($lastPage - 1, $currentPage + 1); $i++) {
+                                $pagesToShow[] = $i;
+                            }
+
+                            // Always show last page
+                            if ($lastPage > 1) {
+                                $pagesToShow[] = $lastPage;
+                            }
+
+                            $pagesToShow = array_unique($pagesToShow);
+                            sort($pagesToShow);
+                        @endphp
+
+                        @foreach($pagesToShow as $index => $page)
+                            {{-- Show ellipsis if gap between pages --}}
+                            @if($index > 0 && $page - $pagesToShow[$index - 1] > 1)
+                                <span class="pagination-dots">...</span>
+                            @endif
+                            <a href="{{ $products->url($page) }}" class="{{ $page == $currentPage ? 'active' : '' }}">{{ $page }}</a>
                         @endforeach
-                        
+
                         @if($products->nextPageUrl())
                             <a href="{{ $products->nextPageUrl() }}"><i class="fas fa-chevron-right"></i></a>
                         @endif
@@ -204,6 +230,14 @@
 
 @push('styles')
 <style>
+    .pagination {
+        flex-wrap: wrap;
+    }
+    .pagination-dots {
+        padding: 0.5rem 0.5rem;
+        color: var(--gray);
+        font-weight: 600;
+    }
     @media (max-width: 992px) {
         .container > div[style*="grid-template-columns"] {
             grid-template-columns: 1fr !important;
